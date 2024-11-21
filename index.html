@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Retro Weather</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div class="container">
+    <div class="header">
+      <img src="assets/logo.png" alt="Weather Channel Logo">
+      <div id="clock" class="clock"></div>
+    </div>
+    <div id="weather-slides" class="weather-slides">
+      <div class="weather-slide visible">
+        <h2>Local Weather</h2>
+        <div id="local-weather"></div>
+      </div>
+      <div class="weather-slide">
+        <h2>National Weather</h2>
+        <div id="national-weather"></div>
+      </div>
+      <div class="weather-slide">
+        <h2>5-Day Forecast</h2>
+        <div id="forecast"></div>
+      </div>
+      <div class="weather-slide">
+        <h2>Radar</h2>
+        <iframe
+          width="650"
+          height="450"
+          src="https://embed.windy.com/embed2.html?lat=40.7128&lon=-74.0060&zoom=5&overlay=rain"
+          frameborder="0"></iframe>
+      </div>
+    </div>
+  </div>
+  <audio autoplay loop>
+    <source src="assets/lo-fi.mp3" type="audio/mpeg">
+  </audio>
+  <script src="script.js"></script>
+</body>
+</html>
