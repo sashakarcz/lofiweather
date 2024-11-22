@@ -17,68 +17,59 @@ async function fetchWeatherDataByCoords(lat, lon) {
   }
 }
 
-// Map weather codes to human-readable descriptions
-function getWeatherDescription(weatherCode) {
-  const descriptions = {
-    0: "Clear sky",
-    1: "Mainly clear",
-    2: "Partly cloudy",
-    3: "Overcast",
-    45: "Fog",
-    48: "Depositing rime fog",
-    51: "Light drizzle",
-    53: "Moderate drizzle",
-    55: "Dense drizzle",
-    61: "Slight rain",
-    63: "Moderate rain",
-    65: "Heavy rain",
-    80: "Slight rain showers",
-    81: "Moderate rain showers",
-    82: "Violent rain showers",
+// Map weather codes to human-readable descriptions and icons
+function getWeatherDetails(weatherCode, isDaytime) {
+  const details = {
+    0: { description: "Clear Sky", icon: isDaytime ? "assets/icons/clear_sky_day.png" : "assets/icons/clear_sky_night.png" },
+    1: { description: "Mainly Clear", icon: isDaytime ? "assets/icons/mainly_clear_day.png" : "assets/icons/mainly_clear_night.png" },
+    2: { description: "Partly Cloudy", icon: isDaytime ? "assets/icons/partly_cloudy_day.png" : "assets/icons/partly_cloudy_night.png" },
+    3: { description: "Overcast", icon: "assets/icons/overcast.png" },
+    45: { description: "Fog", icon: "assets/icons/fog.png" },
+    48: { description: "Depositing Rime Fog", icon: "assets/icons/fog.png" },
+    51: { description: "Light Drizzle", icon: "assets/icons/light_drizzle.png" },
+    53: { description: "Moderate Drizzle", icon: "assets/icons/moderate_drizzle.png" },
+    55: { description: "Dense Drizzle", icon: "assets/icons/dense_drizzle.png" },
+    61: { description: "Slight Rain", icon: "assets/icons/light_rain.png" },
+    63: { description: "Moderate Rain", icon: "assets/icons/moderate_rain.png" },
+    65: { description: "Heavy Rain", icon: "assets/icons/heavy_rain.png" },
+    66: { description: "Freezing Rain (Light)", icon: "assets/icons/freezing_rain_light.png" },
+    67: { description: "Freezing Rain (Heavy)", icon: "assets/icons/freezing_rain_heavy.png" },
+    71: { description: "Light Snowfall", icon: "assets/icons/light_snowfall.png" },
+    73: { description: "Moderate Snowfall", icon: "assets/icons/moderate_snowfall.png" },
+    75: { description: "Heavy Snowfall", icon: "assets/icons/heavy_snowfall.png" },
+    77: { description: "Snow Grains", icon: "assets/icons/snow_grains.png" },
+    80: { description: "Slight Rain Showers", icon: isDaytime ? "assets/icons/light_showers_day.png" : "assets/icons/light_showers_night.png" },
+    81: { description: "Moderate Rain Showers", icon: isDaytime ? "assets/icons/moderate_showers_day.png" : "assets/icons/moderate_showers_night.png" },
+    82: { description: "Violent Rain Showers", icon: isDaytime ? "assets/icons/heavy_showers_day.png" : "assets/icons/heavy_showers_night.png" },
+    85: { description: "Slight Snow Showers", icon: "assets/icons/snow_showers_light.png" },
+    86: { description: "Heavy Snow Showers", icon: "assets/icons/snow_showers_heavy.png" },
+    95: { description: "Thunderstorm (Slight)", icon: "assets/icons/thunderstorm_light.png" },
+    96: { description: "Thunderstorm with Hail (Slight)", icon: "assets/icons/thunderstorm_hail_light.png" },
+    99: { description: "Thunderstorm with Hail (Heavy)", icon: "assets/icons/thunderstorm_hail_heavy.png" },
   };
-  return descriptions[weatherCode] || "Unknown condition";
+  return details[weatherCode] || { description: "Unknown Condition", icon: "assets/icons/unknown.png" };
 }
 
-// Map weather codes to weather icons
-function getWeatherIcon(weatherCode) {
-  const icons = {
-    0: "assets/icons/clear_sky.png",
-    1: "assets/icons/mainly_clear.png",
-    2: "assets/icons/partly_cloudy.png",
-    3: "assets/icons/overcast.png",
-    45: "assets/icons/fog.png",
-    48: "assets/icons/fog.png",
-    51: "assets/icons/light_drizzle.png",
-    53: "assets/icons/moderate_drizzle.png",
-    55: "assets/icons/dense_drizzle.png",
-    61: "assets/icons/light_rain.png",
-    63: "assets/icons/moderate_rain.png",
-    65: "assets/icons/heavy_rain.png",
-    80: "assets/icons/light_showers.png",
-    81: "assets/icons/moderate_showers.png",
-    82: "assets/icons/heavy_showers.png",
-  };
-  return icons[weatherCode] || "assets/icons/unknown.png";
-}
 
-// Display weather data in the Local Weather section
+// Display weather data on the card
 function displayWeather(data) {
   const weather = data.current_weather;
-  const description = getWeatherDescription(weather.weathercode);
-  const icon = getWeatherIcon(weather.weathercode);
-  const weatherContainer = document.getElementById("local-weather");
-  weatherContainer.innerHTML = `
-    <img src="${icon}" alt="${description}" style="width: 50px; height: 50px;">
-    <p><strong>Temperature:</strong> ${weather.temperature}°F</p>
-    <p><strong>Wind Speed:</strong> ${weather.windspeed} mph</p>
-    <p><strong>Condition:</strong> ${description}</p>
+  const currentHour = new Date().getHours();
+  const isDaytime = currentHour >= 6 && currentHour < 18; // Daytime: 6 AM - 6 PM
+  const { description, icon } = getWeatherDetails(weather.weathercode, isDaytime);
+  const weatherCard = document.getElementById("weather-card");
+  weatherCard.innerHTML = `
+    <img src="${icon}" alt="${description}" />
+    <p class="temperature">${weather.temperature}°F</p>
+    <p class="condition">${description}</p>
+    <p>Wind Speed: ${weather.windspeed} mph</p>
   `;
 }
 
-// Display an error message
+// Display an error message on the card
 function displayError(message) {
-  const weatherContainer = document.getElementById("local-weather");
-  weatherContainer.innerHTML = `
+  const weatherCard = document.getElementById("weather-card");
+  weatherCard.innerHTML = `
     <p><strong>Error:</strong> ${message}</p>
   `;
 }
