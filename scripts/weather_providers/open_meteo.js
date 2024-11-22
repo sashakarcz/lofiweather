@@ -3,42 +3,37 @@ import displayError from "../errors.js";
 // Fetch current weather from Open-Meteo API
 async function fetchWeatherDataByCoords(lat, lon) {
   try {
-    const weatherResponse = await fetch(
+    const response = await fetch(
       `https://api.open-meteo.com/v1/forecast?latitude=${lat}&longitude=${lon}&current_weather=true&temperature_unit=fahrenheit`
     );
-    const weatherData = await weatherResponse.json();
-    if (!weatherResponse.ok) {
-      throw new Error("Failed to fetch weather data");
+    const data = await response.json();
+    if (response.ok) {
+      console.log("Raw weather data:", data);
+      return {
+        current_conditions: {
+          //location: data.location.name,
+          temperature_f: data.current_weather.temperature,
+          weather: getWeatherDescription(data.current_weather.weathercode),
+          weather_icon: getWeatherIcon(data.current_weather.weathercode),
+          // TODO: Convert wind to MPH
+          wind: `${data.current_weather.windspeed} ${data.current_weather_units.windspeed}`, // TODO: Add direction,
+          //gusts: data.current_weather.gusts,
+          //humidity_pct: data.current_weather.humidity,
+          //dew_point_f: data.current_weather.dewpoint,
+          //ceiling_ft: data.current_weather.cloudcover,
+          //visibility_ft: data.current_weather.visibility,
+          //pressure_inhg: data.current_weather.pressure,
+        },
+      };
+    } else {
+      console.error("Error fetching weather data:", data);
+      displayError("Failed to fetch weather data.");
+      return null;
     }
-
-    const locationResponse = await fetch(
-      `https://nominatim.openstreetmap.org/reverse?format=json&lat=${lat}&lon=${lon}`
-    );
-    const locationData = await locationResponse.json();
-    if (!locationResponse.ok) {
-      throw new Error("Failed to fetch location data");
-    }
-
-    const locationName = locationData.display_name;
-
-    console.log("Raw weather data:", weatherData);
-    console.log("Location name:", locationName);
-
-    return {
-      current_conditions: {
-        location: locationName,
-        temperature_f: weatherData.current_weather.temperature,
-        weather: getWeatherDescription(weatherData.current_weather.weathercode),
-        weather_icon: getWeatherIcon(weatherData.current_weather.weathercode),
-        wind: `${weatherData.current_weather.windspeed} ${weatherData.current_weather.winddirection}`,
-        humidity_pct: weatherData.current_weather.humidity,
-        dew_point_f: weatherData.current_weather.dewpoint,
-        pressure_inhg: weatherData.current_weather.pressure,
-        visibility_ft: weatherData.current_weather.visibility
-      }
-    };
   } catch (error) {
-    displayError(error.message);
+    console.error("Error:", error);
+    displayError("Failed to fetch weather data.");
+    return null;
   }
 }
 
@@ -85,5 +80,22 @@ function getWeatherIcon(weatherCode) {
   };
   return icons[weatherCode] || "unknown";
 }
-
-export default fetchWeatherDataByCoords;
+export function getWeatherData(location) {
+  console.log("Fetching weather data for location:", location);
+  return fetchWeatherDataByCoords(location.latitude, location.longitude);
+  return {
+    current_conditions: {
+      location: "Ada, MI",
+      temperature_f: 65,
+      weather: "Clear",
+      weather_icon: "clear_sky",
+      wind: "Calm",
+      gusts: "None",
+      humidity_pct: 50,
+      dew_point_f: 65,
+      ceiling_ft: 0,
+      visibility_ft: 0,
+      pressure_inhg: 0,
+    },
+  };
+}
