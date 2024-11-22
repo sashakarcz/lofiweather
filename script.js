@@ -97,6 +97,6 @@ function getUserLocation() {
 }
 
 // Initialize the app
-window.onload = () => {
-  getUserLocation();
-};
+//window.onload = () => {
+  //getUserLocation();
+//};
