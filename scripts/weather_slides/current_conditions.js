@@ -1,7 +1,8 @@
 // Display weather data in the Local Weather section
 export function displayWeather(data) {
-  const weatherContainer = document.getElementById("local-weather");
+  const weatherContainer = document.getElementById("weather-card");
   weatherContainer.innerHTML = `
+    <h2>Local on the 8s</h2>
     <img src="assets/icons/${data.current_conditions.weather_icon}.png" alt="${data.current_conditions.weather}" style="width: 50px; height: 50px;">
     <p><strong>Temperature:</strong> ${data.current_conditions.temperature_f}°F</p>
     <p><strong>Wind Speed:</strong> ${data.current_conditions.wind} mph</p>
