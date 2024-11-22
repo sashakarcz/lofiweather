@@ -4,7 +4,7 @@ import displayError from "../errors.js";
 async function fetchWeatherDataByCoords(lat, lon) {
   try {
     const response = await fetch(
-      `https://api.open-meteo.com/v1/forecast?latitude=${lat}&longitude=${lon}&current_weather=true&temperature_unit=fahrenheit`
+      `https://api.open-meteo.com/v1/forecast?latitude=${lat}&longitude=${lon}&current_weather=true&temperature_unit=fahrenheit`,
     );
     const data = await response.json();
     if (response.ok) {
@@ -61,24 +61,28 @@ function getWeatherDescription(weatherCode) {
 
 // Map weather codes to weather icons
 function getWeatherIcon(weatherCode) {
+  const currentHour = new Date().getHours();
+  const isDaytime = currentHour >= 6 && currentHour < 18; // Daytime: 6 AM - 6 PM
+
   const icons = {
-    0:  "clear_sky_day",  // TODO: Add logic to determine day or night
-    1:  "mainly_clear",
-    2:  "partly_cloudy",
-    3:  "overcast",
-    45: "fog",
-    48: "fog",
-    51: "light_drizzle",
-    53: "moderate_drizzle",
-    55: "dense_drizzle",
-    61: "light_rain",
-    63: "moderate_rain",
-    65: "heavy_rain",
-    80: "light_showers",
-    81: "moderate_showers",
-    82: "heavy_showers",
+    0: isDaytime ? "wi-day-sunny" : "wi-night-clear",
+    1: isDaytime ? "wi-day-sunny-overcast" : "wi-night-alt-partly-cloudy",
+    2: isDaytime ? "wi-day-cloudy" : "wi-night-alt-cloudy",
+    3: isDaytime ? "wi-cloudy" : "wi-night-alt-cloudy",
+    45: isDaytime ? "wi-day-fog" : "wi-night-fog",
+    48: isDaytime ? "wi-day-fog" : "wi-night-fog",
+    51: isDaytime ? "wi-day-sprinkle" : "wi-night-alt-sprinkle",
+    53: isDaytime ? "wi-day-showers" : "wi-night-alt-showers",
+    55: isDaytime ? "wi-day-rain" : "wi-night-alt-rain",
+    61: isDaytime ? "wi-day-rain-mix" : "wi-night-alt-rain-mix",
+    63: isDaytime ? "wi-day-rain" : "wi-night-alt-rain",
+    65: isDaytime ? "wi-day-rain-wind" : "wi-night-alt-rain-wind",
+    80: isDaytime ? "wi-day-showers" : "wi-night-alt-showers",
+    81: isDaytime ? "wi-day-storm-showers" : "wi-night-alt-storm-showers",
+    82: isDaytime ? "wi-day-thunderstorm" : "wi-night-alt-thunderstorm",
   };
-  return icons[weatherCode] || "unknown";
+
+  return icons[weatherCode] || "wi-na";
 }
 export function getWeatherData(location) {
   console.log("Fetching weather data for location:", location);
