@@ -1,37 +1,15 @@
-// API key placeholder, to be replaced by GitHub Actions during deployment
-const apiKey = 'REPLACE_WITH_OPENWEATHER_API_KEY';
-
-// Fetch weather data by city name
-async function fetchWeatherData(location) {
-  try {
-    const response = await fetch(
-      `https://api.openweathermap.org/data/2.5/weather?q=${location}&units=imperial&appid=${apiKey}`
-    );
-    const data = await response.json();
-    if (response.ok) {
-      displayWeather(data);
-    } else {
-      console.error('Error fetching weather data:', data.message);
-      displayError(data.message);
-    }
-  } catch (error) {
-    console.error('Error:', error);
-    displayError('Failed to fetch weather data.');
-  }
-}
-
-// Fetch weather data by coordinates
+// Fetch current weather from Open-Meteo API
 async function fetchWeatherDataByCoords(lat, lon) {
   try {
     const response = await fetch(
-      `https://api.openweathermap.org/data/2.5/weather?lat=${lat}&lon=${lon}&units=imperial&appid=${apiKey}`
+      `https://api.open-meteo.com/v1/forecast?latitude=${lat}&longitude=${lon}&current_weather=true&temperature_unit=fahrenheit`
     );
     const data = await response.json();
     if (response.ok) {
       displayWeather(data);
     } else {
-      console.error('Error fetching weather data:', data.message);
-      displayError(data.message);
+      console.error('Error fetching weather data:', data);
+      displayError('Failed to fetch weather data.');
     }
   } catch (error) {
     console.error('Error:', error);
@@ -41,13 +19,12 @@ async function fetchWeatherDataByCoords(lat, lon) {
 
 // Display weather data in the Local Weather section
 function displayWeather(data) {
+  const weather = data.current_weather;
   const weatherContainer = document.getElementById('local-weather');
   weatherContainer.innerHTML = `
-    <p><strong>Location:</strong> ${data.name}</p>
-    <p><strong>Temperature:</strong> ${data.main.temp}°F</p>
-    <p><strong>Condition:</strong> ${data.weather[0].description}</p>
-    <p><strong>Humidity:</strong> ${data.main.humidity}%</p>
-    <p><strong>Wind Speed:</strong> ${data.wind.speed} mph</p>
+    <p><strong>Temperature:</strong> ${weather.temperature}°F</p>
+    <p><strong>Wind Speed:</strong> ${weather.windspeed} mph</p>
+    <p><strong>Condition:</strong> ${weather.weathercode}</p>
   `;
 }
 
@@ -71,13 +48,13 @@ function getUserLocation() {
       (error) => {
         console.error('Error getting location:', error);
         displayError('Unable to retrieve location. Defaulting to New York.');
-        fetchWeatherData('New York'); // Default to a specific location
+        fetchWeatherDataByCoords(40.7128, -74.0060); // Default to New York
       }
     );
   } else {
     console.error('Geolocation is not supported by this browser.');
     displayError('Geolocation is not supported. Defaulting to New York.');
-    fetchWeatherData('New York'); // Default to a specific location
+    fetchWeatherDataByCoords(40.7128, -74.0060); // Default to New York
   }
 }
 
@@ -85,4 +62,3 @@ function getUserLocation() {
 window.onload = () => {
   getUserLocation();
 };
-
