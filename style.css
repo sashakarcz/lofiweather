@@ -57,3 +57,39 @@ audio {
   visibility: hidden;
 }
 
+/* Weather Card */
+.weather-card {
+  width: 90%;
+  max-width: 350px;
+  margin: 20px auto;
+  padding: 20px;
+  border-radius: 15px;
+  background: rgba(0, 0, 0, 0.5); /* Semi-transparent dark background */
+  color: white;
+  text-align: center;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+  backdrop-filter: blur(10px); /* Frosted glass effect */
+}
+
+.weather-card img {
+  width: 100px;
+  height: 100px;
+  margin: 10px 0;
+}
+
+.weather-card .temperature {
+  font-size: 2.5em;
+  font-weight: bold;
+  margin: 10px 0;
+}
+
+.weather-card .condition {
+  font-size: 1.2em;
+  font-style: italic;
+  margin-bottom: 10px;
+}
+
+.weather-card p {
+  margin: 5px 0;
+  font-size: 1em;
+}
