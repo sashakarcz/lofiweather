@@ -15,6 +15,7 @@ async function fetchWeatherDataByCoords(lat, lon) {
           temperature_f: data.current_weather.temperature,
           weather: getWeatherDescription(data.current_weather.weathercode),
           weather_icon: getWeatherIcon(data.current_weather.weathercode),
+          // TODO: Convert wind to MPH
           wind: `${data.current_weather.windspeed} ${data.current_weather_units.windspeed}`, // TODO: Add direction,
           //gusts: data.current_weather.gusts,
           //humidity_pct: data.current_weather.humidity,
@@ -61,7 +62,7 @@ function getWeatherDescription(weatherCode) {
 // Map weather codes to weather icons
 function getWeatherIcon(weatherCode) {
   const icons = {
-    0:  "clear_sky",
+    0:  "clear_sky_day",  // TODO: Add logic to determine day or night
     1:  "mainly_clear",
     2:  "partly_cloudy",
     3:  "overcast",
