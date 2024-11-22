@@ -1,7 +1,6 @@
-import displayError from './errors.js';
+import displayError from "./errors.js";
 
-class Location {
-}
+class Location {}
 
 class LatLon extends Location {
   constructor(latitude, longitude) {
@@ -31,13 +30,13 @@ export default async function getLocation() {
         (error) => {
           console.error("Error getting location:", error);
           displayError("Unable to retrieve location. Defaulting to New York.");
-          resolve(new LatLon(40.7128, -74.0060));  // Default to New York
-        }
+          resolve(new LatLon(40.7128, -74.006)); // Default to New York
+        },
       );
     } else {
       console.error("Geolocation is not supported by this browser.");
       displayError("Geolocation is not supported. Defaulting to New York.");
-      resolve(new LatLon(40.7128, -74.0060));  // Default to New York
+      resolve(new LatLon(40.7128, -74.006)); // Default to New York
     }
   });
 }

@@ -6,4 +6,3 @@ export default function displayError(message) {
     <p><strong>Error:</strong> ${message}</p>
   `;
 }
-

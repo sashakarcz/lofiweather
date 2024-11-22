@@ -1,43 +1,46 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Lo-Fi Weather</title>
-  <link rel="stylesheet" href="style.css">
-</head>
-<body>
-  <div class="container">
-    <div class="header">
-      <img src="assets/logo.webp" alt="Lo-Fi Weather Logo">
-      <div id="clock" class="clock"></div>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Lo-Fi Weather</title>
+    <link rel="stylesheet" href="style.css" />
+    <link rel="stylesheet" href="weather-icons.min.css" />
+  </head>
+  <body>
+    <div class="container">
+      <div class="header">
+        <img src="assets/logo.webp" alt="Lo-Fi Weather Logo" />
+        <div id="clock" class="clock"></div>
+      </div>
+      <div id="weather-card" class="weather-card"></div>
+      <!-- Weather Card for Local Weather -->
+      <div id="weather-slides" class="weather-slides">
+        <div class="weather-slide visible">
+          <div id="local-weather"></div>
+        </div>
+        <div class="weather-slide">
+          <h2>National Weather</h2>
+          <div id="national-weather"></div>
+        </div>
+        <div class="weather-slide">
+          <h2>5-Day Forecast</h2>
+          <div id="forecast"></div>
+        </div>
+        <div class="weather-slide">
+          <h2>Radar</h2>
+          <iframe
+            width="650"
+            height="450"
+            src="https://embed.windy.com/embed2.html?lat=40.7128&lon=-74.0060&zoom=5&overlay=rain"
+            frameborder="0"
+          ></iframe>
+        </div>
+      </div>
     </div>
-    <div id="weather-card" class="weather-card"></div> <!-- Weather Card for Local Weather -->
-    <div id="weather-slides" class="weather-slides">
-      <div class="weather-slide visible">
-        <div id="local-weather"></div>
-      </div>
-      <div class="weather-slide">
-        <h2>National Weather</h2>
-        <div id="national-weather"></div>
-      </div>
-      <div class="weather-slide">
-        <h2>5-Day Forecast</h2>
-        <div id="forecast"></div>
-      </div>
-      <div class="weather-slide">
-        <h2>Radar</h2>
-        <iframe
-          width="650"
-          height="450"
-          src="https://embed.windy.com/embed2.html?lat=40.7128&lon=-74.0060&zoom=5&overlay=rain"
-          frameborder="0"></iframe>
-      </div>
-    </div>
-  </div>
-  <audio autoplay loop>
-    <source src="assets/lo-fi.mp3" type="audio/mpeg">
-  </audio>
-  <script type="module" src="scripts/main.js"></script>
-</body>
+    <audio autoplay loop>
+      <source src="assets/lo-fi.mp3" type="audio/mpeg" />
+    </audio>
+    <script type="module" src="scripts/main.js"></script>
+  </body>
 </html>
