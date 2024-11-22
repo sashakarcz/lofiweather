@@ -2,6 +2,7 @@
 export function displayWeather(data) {
   const weatherContainer = document.getElementById("local-weather");
   weatherContainer.innerHTML = `
+    <h3>${data.current_conditions.location}</h3>
     <img src="assets/icons/${data.current_conditions.weather_icon}.png" alt="${data.current_conditions.weather}" style="width: 50px; height: 50px;">
     <p><strong>Temperature:</strong> ${data.current_conditions.temperature_f}°F</p>
     <p><strong>Wind Speed:</strong> ${data.current_conditions.wind} mph</p>
